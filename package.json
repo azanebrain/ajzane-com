@@ -1,0 +1,25 @@
+{
+  "name": "ajzane-com",
+  "version": "0.1.0",
+  "description": "The personal site of AJ Zane",
+  "author": "AJ Zane <androiddreams@AJZane.com>",
+  "homepage": "https://github.com/azanebrain/ajzane-com",
+  "engines": {
+    "node": ">=v0.10.22"
+  },
+  "scripts": {
+    "build": "echo \"Error: there is no build command specified\" && exit 1",
+    "postinstall": "node_modules/.bin/bower install",
+    "serve": "echo \"Error: there is no serve command specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/azanebrain/ajzane-com.git"
+  },
+  "bugs": {
+    "url": "https://github.com/azanebrain/ajzane-com/issues"
+  },
+  "private": true,
+  "license": "GPL2"
+}
