@@ -1,27 +1,77 @@
 //variables
+//colors
   $primary-color
   $secondary-color
+//named colors
+$background-color: gray
+$content-width: 800px
 
+// layout
+$spacer: 20px //the general space between elements
+
+//extends
+%font-bold
+  font-weight: bold
+
+%text-center
+  margin: 0 auto
+  text-align: center
+
+//normalize reset
+@for $i from 1 through 6
+  h#{$i}
+    margin: 0
+
+//grid
+.row
+  display: block
+  width: 100%
+
+.col
+  margin: 0 auto
+  width: $content-width
+
+//modules
+
+// Base
 body
-  background: gray
+  background: $background-color
   font-size: 1em
 
-//classes to add
-  //grid
-  .row
-    full width
-  .col
-    content width
-  //text utility
-  .headline
-  .text-center
-  .legal
-  //modules
-  .banner
-  .footer-logos
-    extend text-center
-  .slider
-  .slide
+// text utility
+.headline
+  @extend %font-bold
+  background: $background-color
+  #contentintro &
+    @extend %text-center
+    border-top: solid 1px white
+    width: 500px
+
+.legal
+  text-align: right
+
+// #contentintro
+
+.title
+  margin:
+    top: -1 * $spacer
+  text-align: center
+  width: 100%
+.title-summary
+  font-size: normal
+
+.banner
+  background: rgba(0,0,0,.2)
+  height: 200px
+
+#maincontent
+  margin-top: $spacer * 2
+
+.footer-logos
+  @extend %text-center
+
+// .slider
+// .slide
 
 .tooltip
   display: none

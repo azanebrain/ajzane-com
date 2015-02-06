@@ -4,16 +4,15 @@ block banner
   .banner(role="banner") &nbsp;
 
 block content  
-  .row#maincontent
+  .row#contentintro
     .col
-      h1(itemprop="name") AJ Zane
+      h1.title(itemprop="name") AJ Zane
       p.headline(role="heading") Develop Narrative
-  .row
+  .row#maincontent
     .col(itemprop="description" role="main")
-      p Summary
-  .row
-    .col()
       .slider(role="slider" aria-valuemax="3" aria-valuemin="1" aria-valuenow="1")
         .slide Slide 1
         .slide Slide 2
         .slide Slide 3
+      h1.title-summary Summary
+      p this is what I do. All day long. Every day.
