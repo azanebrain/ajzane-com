@@ -12,6 +12,8 @@
     "test",
     "tests"
   ],
-  "dependencies": { },
-  "devDependencies": { }
+  "dependencies": {
+    "slick-carousel": "~1.4.1"
+  },
+  "devDependencies": {}
 }

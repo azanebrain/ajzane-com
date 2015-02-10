@@ -9,6 +9,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     app: 'app',
     dist: 'dist',
+    tmp: '.tmp',
 
     sass: {
       options: {
@@ -28,7 +29,7 @@ module.exports = function(grunt) {
     concat: {},
 
     jade: {
-      compile: {
+      dist: {
         options: {
           pretty: true,
           data: {
@@ -36,7 +37,6 @@ module.exports = function(grunt) {
           }
         },
         files: [{
-          // '<%= dist %>': '<%= app %>/*.jade'
           expand: true,
           cwd: '<%= app %>/views',
           src: '**/*.jade',
@@ -51,14 +51,28 @@ module.exports = function(grunt) {
         src: ['<%= dist %>/*']
       },
     },
+
     copy: {
       dist: {
         files: [{
           expand: true,
           cwd:'<%= app %>/',
-          src: ['**/*.html', '!**/*.sass', '!bower_components/**', '**/*.txt', 'js/*.js', '!js/app.js'],
+          src: ['js/*.js'],
           dest: '<%= dist %>/'
-        } ]
+        }, {
+          expand: true,
+          cwd:'bower_components',
+          src: ['**/*'],
+          dest: '<%= dist %>/bower_components/'
+        }]
+      },
+      publish: {
+        files: [{
+          expand: true,
+          cwd:'<%= app %>/',
+          src: ['js/*.js', '!js/app.js'],
+          dest: '<%= dist %>/'
+        }]
       },
     },
 
@@ -92,6 +106,35 @@ module.exports = function(grunt) {
       css: ['<%= dist %>/css/**/*.css'],
       options: {
         dirs: ['<%= dist %>']
+      }
+    },
+
+    jadeUsemin: {
+      publish: {
+        options: {
+          tasks: {
+            js: ['concat', 'uglify'],
+            css: ['concat', 'cssmin']
+          }
+        },
+        files: [{
+          src: '<%= app %>/includes/header.jade',
+          dest: '<%= tmp %>/concat/includes/header.jade'
+        }, {
+          src: '<%= app %>/includes/footer.jade',
+          dest: '<%= tmp %>/concat/includes/footer.jade'
+        }]
+      }
+    },
+
+    replace: {
+      files: {
+        src: ['<%= dist %>/**/*.html'],
+        overwrite: true, // overwrite matched source files
+        replacements: [{
+          from: "#{replacementterm}",
+          to: "replacementvalue"
+        }]
       }
     },
 
@@ -158,8 +201,8 @@ module.exports = function(grunt) {
   grunt.registerTask('bower-install', ['wiredep']);
 
   // Custom Tasks
-  grunt.registerTask('default', ['compile-jade', 'compile-sass', 'bower-install', 'connect:app', 'watch']);
+  grunt.registerTask('default', ['clean:dist', 'copy:dist', 'jade:dist', 'sass:dist', 'jadeUsemin', 'replace', 'bower-install', 'connect:app', 'watch']);
   grunt.registerTask('server-dist', ['connect:dist']);
-  grunt.registerTask('publish', ['clean:dist', 'jade', 'sass', 'useminPrepare', 'copy:dist', 'imagemin', 'concat', 'cssmin', 'uglify', 'usemin']);
+  grunt.registerTask('publish', ['clean:dist', 'copy:publish', 'jade', 'sass', 'useminPrepare', 'imagemin', 'concat', 'cssmin', 'replace', 'uglify', 'usemin']);
 
 };
