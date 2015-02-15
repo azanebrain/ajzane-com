@@ -43,6 +43,21 @@ module.exports = function(grunt) {
           ext: '.html',
           dest: '<%= dist %>/'
         }]
+      },
+      publish: {
+				options: {
+					pretty: true,
+					data: {
+						debug: false
+					}
+				},
+				files: [{
+					expand: true,
+					cwd: '<%= tmp %>/concat/views',
+					src: '**/*.jade',
+					ext: '.html',
+					dest: '<%= dist %>/'
+				}]
       }
     },
 
@@ -72,6 +87,24 @@ module.exports = function(grunt) {
           cwd:'<%= app %>/',
           src: ['js/*.js', '!js/app.js'],
           dest: '<%= dist %>/'
+        }]
+      },
+      tmp: { //Copy all of the jade files to the temp directory
+        files: [{
+					expand: true,
+          cwd:'<%= app %>/views',
+          src: '**/*.jade',
+          dest: '<%= tmp %>/concat/views/'
+        }, {
+					expand: true,
+          cwd:'<%= app %>/includes',
+          src: '**/*.jade',
+          dest: '<%= tmp %>/concat/includes/'
+        }, {
+					expand: true,
+          cwd:'<%= app %>/js',
+          src: ['**/*.js', '!app.js'],
+          dest: '<%= tmp %>/js/'
         }]
       },
     },
@@ -134,6 +167,9 @@ module.exports = function(grunt) {
         replacements: [{
           from: "#{replacementterm}",
           to: "replacementvalue"
+        }, {
+          from: "dist/",
+          to: ""
         }]
       }
     },
@@ -203,6 +239,6 @@ module.exports = function(grunt) {
   // Custom Tasks
   grunt.registerTask('default', ['clean:dist', 'copy:dist', 'jade:dist', 'sass:dist', 'jadeUsemin', 'replace', 'bower-install', 'connect:app', 'watch']);
   grunt.registerTask('server-dist', ['connect:dist']);
-  grunt.registerTask('publish', ['clean:dist', 'copy:publish', 'jade', 'sass', 'useminPrepare', 'imagemin', 'concat', 'cssmin', 'replace', 'uglify', 'usemin']);
+  grunt.registerTask('publish', ['clean:dist', 'copy:publish', 'sass', 'copy:tmp', 'useminPrepare', 'jadeUsemin', 'jade:publish', 'newer:imagemin', 'concat', 'cssmin', 'replace', 'uglify', 'usemin']);
 
 };

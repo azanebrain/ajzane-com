@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "grunt publish",
-    "postinstall": "node_modules/.bin/bower install",
+    "postinstall": "bower install",
     "serve": "grunt",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -37,6 +37,7 @@
     "grunt-contrib-jade": "~0.14.1",
     "grunt-contrib-uglify": "~0.7.0",
     "grunt-contrib-imagemin": "~0.9.2",
+    "grunt-newer": "~0.8.0",
     "grunt-contrib-sass": "~0.8.1",
     "grunt-jade-usemin": "~0.11.1",
     "grunt-text-replace": "~0.4.0"
