@@ -2,8 +2,7 @@
 
 module.exports = function(grunt) {
 
-    require('load-grunt-tasks')(grunt);
-
+  require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -13,20 +12,28 @@ module.exports = function(grunt) {
 
     sass: {
       options: {
-        // includePaths: ['<%= app %>/bower_components/foundation/scss']
-        bundleExec: true
+        // includePaths: ['bower_components/foundation/scss'],
+        indentedSyntax: true
       },
       dist: {
         options: {
-          style: 'compressed'
+          outputStyle: 'extended',
+          sourceMap: true
         },
         files: {
           '<%= dist %>/css/app.css': '<%= app %>/sass/app.sass'
         }
+      },
+      publish: {
+        options: {
+          outputStyle: 'compressed',
+          sourceMap: false
+        },
+        files: {
+          '<%= dist %>/css/app.css': '<%= app %>/scss/app.sass'
+        }
       }
     },
-
-    concat: {},
 
     jade: {
       dist: {
@@ -45,66 +52,103 @@ module.exports = function(grunt) {
         }]
       },
       publish: {
-				options: {
-					pretty: true,
-					data: {
-						debug: false
-					}
-				},
-				files: [{
-					expand: true,
-					cwd: '<%= tmp %>/concat/views',
-					src: '**/*.jade',
-					ext: '.html',
-					dest: '<%= dist %>/'
-				}]
+        options: {
+          pretty: true,
+          data: {
+            debug: false
+          }
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= tmp %>/concat/views',
+          src: '**/*.jade',
+          ext: '.html',
+          dest: '<%= dist %>/'
+        }]
       }
+    },
+
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
+      all: [
+        'Gruntfile.js',
+        '<%= dist %>/js/**/*.js'
+      ]
     },
 
     clean: {
       dist: {
         src: ['<%= dist %>/*']
       },
-    },
-
-    copy: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd:'<%= app %>/',
-          src: ['js/*.js'],
-          dest: '<%= dist %>/'
-        }, {
-          expand: true,
-          cwd:'bower_components',
-          src: ['**/*'],
-          dest: '<%= dist %>/bower_components/'
-        }]
+      tmp: {
+        src: ['<%= tmp %>/*']
       },
-      publish: {
+    },
+    copy: {
+      views: { // Copy the views to the temp directory
         files: [{
           expand: true,
-          cwd:'<%= app %>/',
-          src: ['js/*.js', '!js/app.js'],
-          dest: '<%= dist %>/'
+          cwd:'<%= app %>/views',
+          src: '**/*.jade',
+          dest: '<%= tmp %>/concat/views/'
         }]
       },
       tmp: { //Copy all of the jade files to the temp directory
         files: [{
-					expand: true,
-          cwd:'<%= app %>/views',
-          src: '**/*.jade',
-          dest: '<%= tmp %>/concat/views/'
-        }, {
-					expand: true,
+          expand: true,
           cwd:'<%= app %>/includes',
           src: '**/*.jade',
           dest: '<%= tmp %>/concat/includes/'
         }, {
-					expand: true,
+          expand: true,
           cwd:'<%= app %>/js',
           src: ['**/*.js', '!app.js'],
           dest: '<%= tmp %>/js/'
+        }, {
+          expand: true,
+          cwd:'bower_components/font-awesome/fonts',
+          src: ['**/*'],
+          dest: '<%= tmp %>/fonts/'
+        }]
+      },
+      publish: { //Copy the assets from temp to the distribution directory
+        files: [{
+          expand: true,
+          cwd:'<%= tmp %>/js',
+          src: ['**/*', '!*.map'],
+          dest: '<%= dist %>/js/'
+        }, {
+          expand: true,
+          cwd:'<%= tmp %>/css',
+          src: ['**/*.min.css', '!*.map'],
+          dest: '<%= dist %>/css/'
+        }, {
+          expand: true,
+          cwd:'<%= tmp %>/fonts',
+          src: '**/*',
+          dest: '<%= dist %>/fonts/'
+        }]
+      },
+      dist: { //Copy the assets to the dist directory to work in development
+        files: [{
+          expand: true,
+          cwd:'<%= app %>/',
+          src: ['fonts/**', '**/*.html', '!**/*.scss', '!**/*.jade', '**/*.txt', 'js/*.js'],
+          dest: '<%= dist %>/'
+        }, {
+          expand: true,
+          cwd:'bower_components/',
+          src: ['**'],
+          dest: '<%= dist %>/bower_components/',
+          filter: 'isFile'
+        }, {
+          expand: true,
+          flatten: true,
+          src: ['bower_components/font-awesome/fonts/**'],
+          dest: '<%= dist %>/fonts/',
+          filter: 'isFile'
         }]
       },
     },
@@ -120,6 +164,31 @@ module.exports = function(grunt) {
       }
     },
 
+    replace: {
+      build: {
+        src: ['<%= dist %>/**/*.html'],
+        overwrite: true, // overwrite matched source files
+        replacements: [{
+          from: "#{replacementterm}",
+          to: "replacementvalue"
+        }, {
+          from: ".tmp/",
+          to: ""
+        }]
+      },
+      watch: {
+        src: ['<%= dist %>/**/*.html'],
+        overwrite: true, // overwrite matched source files
+        replacements: [{
+          from: "#{replacementterm}",
+          to: "replacementvalue"
+        }, {
+          from: ".tmp/",
+          to: ""
+        }]
+      }
+    },
+
     uglify: {
       options: {
         preserveComments: 'some',
@@ -129,14 +198,17 @@ module.exports = function(grunt) {
 
     useminPrepare: {
       html: ['<%= dist %>/index.html'],
+      // html: ['<%= app %>/includes/header.jade'], broken
       options: {
         dest: '<%= dist %>'
       }
     },
 
     usemin: {
-      html: ['<%= dist %>/**/*.html', '!<%= app %>/bower_components/**'],
+      // html: ['<%= dist %>/**/*.html', '!<%= app %>/bower_components/**'],
+      html: ['<%= dist %>/**/*.html'],
       css: ['<%= dist %>/css/**/*.css'],
+      // css: ['<%= dist %>/css/**/*.css', '.tmp/concat/css/libraries.min.css'],
       options: {
         dirs: ['<%= dist %>']
       }
@@ -160,35 +232,25 @@ module.exports = function(grunt) {
       }
     },
 
-    replace: {
-      files: {
-        src: ['<%= dist %>/**/*.html'],
-        overwrite: true, // overwrite matched source files
-        replacements: [{
-          from: "#{replacementterm}",
-          to: "replacementvalue"
-        }, {
-          from: "dist/",
-          to: ""
-        }]
-      }
-    },
-
     watch: {
       grunt: {
         files: ['Gruntfile.js'],
-        tasks: ['sass', 'jade']
+        tasks: ['sass:dist', 'jade:dist', 'imagemin', 'copy:dist']
       },
       sass: {
-        files: '<%= app %>/sass/**/*.sass',
+        files: ['<%= app %>/sass/**/*.scss', '<%= app %>/sass/**/*.sass'],
         tasks: ['sass']
       },
       jade: {
-        files: '<%= app %>/**/*.jade',
-        tasks: ['jade']
+        files: ['<%= app %>/views/**/*.jade', '<%= app %>/includes/**/*.jade'],
+        tasks: ['jade:dist', 'replace:watch']
+      },
+      js: {
+        files: '<%= app %>/js/**/*.js',
+        tasks: ['copy:dist', 'replace:watch']
       },
       livereload: {
-        files: ['<%= dist %>/**/*.html', '!<%= app %>/bower_components/**', '<%= dist %>/js/**/*.js', '<%= dist %>/css/**/*.css', '<%= dist %>/img/**/*.{jpg,gif,svg,jpeg,png,ico}'],
+        files: '<%= dist %>/**/*',
         options: {
           livereload: true
         }
@@ -223,8 +285,9 @@ module.exports = function(grunt) {
           '<%= app %>/**/*.jade'
         ],
         exclude: [
-          // 'jquery-placeholder',
-          // 'foundation'
+          'modernizr',
+          'font-awesome',
+          'foundation'
         ]
       }
     }
@@ -232,13 +295,15 @@ module.exports = function(grunt) {
   });
 
   // Grunt Tasks
-  grunt.registerTask('compile-jade', ['jade']);
-  grunt.registerTask('compile-sass', ['sass']);
+  grunt.loadNpmTasks('grunt-text-replace');
   grunt.registerTask('bower-install', ['wiredep']);
+  grunt.registerTask('replace-text', ['replace:watch']);
 
   // Custom Tasks
-  grunt.registerTask('default', ['clean:dist', 'copy:dist', 'jade:dist', 'sass:dist', 'jadeUsemin', 'replace', 'bower-install', 'connect:app', 'watch']);
+  grunt.registerTask('default', ['clean:dist', 'sass:dist', 'copy:dist', 'jade:dist', 'imagemin', 'replace:watch', 'bower-install', 'connect:app', 'watch']);
+  grunt.registerTask('validate-js', ['jshint']);
   grunt.registerTask('server-dist', ['connect:dist']);
-  grunt.registerTask('publish', ['clean:dist', 'copy:publish', 'sass', 'copy:tmp', 'useminPrepare', 'jadeUsemin', 'jade:publish', 'newer:imagemin', 'concat', 'cssmin', 'replace', 'uglify', 'usemin']);
+  // skip JS tests  'validate-js',
+  grunt.registerTask('publish', ['clean:dist', 'clean:tmp', 'sass:publish', 'copy:tmp', 'copy:views', 'jadeUsemin:publish', 'jade:publish', 'copy:publish', 'newer:imagemin', 'concat', 'cssmin', 'replace:build', 'uglify', 'usemin']);
 
 };

@@ -13,7 +13,8 @@
     "tests"
   ],
   "dependencies": {
-    "slick-carousel": "~1.4.1"
+    "slick-carousel": "~1.4.1",
+    "font-awesome": "~4.3.0"
   },
   "devDependencies": {}
 }
