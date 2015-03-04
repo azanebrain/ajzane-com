@@ -12,6 +12,9 @@ $text-color: #eee
 $link-color: #65A5A5
 $link-hover-color: #32B2B2
 
+//breakpoints
+$breakpoint: 64.063em
+
 // layout
 $spacer: 20px //the general space between elements
 
@@ -38,7 +41,11 @@ $spacer: 20px //the general space between elements
 
 .col
   margin: 0 auto
-  width: $content-width
+  padding: 0 15px
+  width: 100%
+  @media only screen and (min-width: $breakpoint)
+    padding: 0
+    width: $content-width
 
 //modules
 
@@ -67,10 +74,14 @@ a:hover
   #contentintro &
     @extend %text-center
     border-top: solid 1px white
-    width: 500px
+    width: 50%
+    @media only screen and (min-width: $breakpoint)
+      width: 500px
 
 .legal
   text-align: right
+  padding-right: 40px
+  color: #9E9E9E
 
 // #contentintro
 
@@ -93,6 +104,9 @@ a:hover
 
 .footer-logos
   @extend %text-center
+  width: 60%
+  @media only screen and (min-width: $breakpoint)
+    width: $content-width
 
 // .slider
 // .slide
