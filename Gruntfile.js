@@ -96,7 +96,7 @@ module.exports = function(grunt) {
         }]
       },
       tmp: { //Copy all of the jade files to the temp directory
-        files: [{
+        files: [{ 
           expand: true,
           cwd:'<%= app %>/includes',
           src: '**/*.jade',
@@ -106,6 +106,11 @@ module.exports = function(grunt) {
           cwd:'<%= app %>/js',
           src: ['**/*.js', '!app.js'],
           dest: '<%= tmp %>/js/'
+        }, {
+          expand: true,
+          cwd:'<%= app %>/fonts',
+          src: '**/*',
+          dest: '<%= tmp %>/fonts/'
         }, {
           expand: true,
           cwd:'bower_components/font-awesome/fonts',
