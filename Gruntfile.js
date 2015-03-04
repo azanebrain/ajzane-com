@@ -30,7 +30,7 @@ module.exports = function(grunt) {
           sourceMap: false
         },
         files: {
-          '<%= dist %>/css/app.css': '<%= app %>/scss/app.sass'
+          '<%= dist %>/css/app.css': '<%= app %>/sass/app.sass'
         }
       }
     },
