@@ -1,5 +1,6 @@
 // Assets
 @import fontz
+@import url(http://fonts.googleapis.com/css?family=Poiret+One|Righteous)
 
 //variables
 //colors
@@ -8,15 +9,22 @@
 //named colors
 $background-color: #101112
 $content-width: 800px
-$text-color: #eee
+$text-color: #F1E0CF
+$headline-color: #F2E8DE
 $link-color: #65A5A5
 $link-hover-color: #32B2B2
+$tooltip-background-color: $text-color
+$tooltip-text-color: $background-color
 
 //breakpoints
 $breakpoint: 64.063em
 
 // layout
 $spacer: 20px //the general space between elements
+
+//typography
+$font-headline-family: 'Righteous', cursive
+$font-normal-family: 'Poiret One', cursive
 
 //extends
 %font-bold
@@ -58,7 +66,9 @@ body
 body
   background: $background-color
   color: $text-color
-  font-size: 1em
+  font:
+    family: $font-normal-family
+    size: 1.4em
 
 a,
 a:visited,
@@ -74,20 +84,31 @@ a:hover
   #contentintro &
     @extend %text-center
     border-top: solid 1px white
+    font-size: 1.75em
+    letter-spacing: 11px
+    padding: 
+      top: $spacer / 2
     width: 50%
     @media only screen and (min-width: $breakpoint)
-      width: 500px
+      width: 600px
 
 .legal
-  text-align: right
-  padding-right: 40px
   color: #9E9E9E
+  font-size: .75em
+  padding-right: 40px
+  text-align: right
 
 // #contentintro
 
 .title
+  color: $headline-color
+  font:
+    family: $font-headline-family
+    size: 3em
+  letter-spacing: 20px
   margin:
-    top: -1 * $spacer
+    top: -1 * $spacer * 2
+    bottom: 10px
   text-align: center
   width: 100%
 .title-summary
@@ -114,6 +135,12 @@ a:hover
 .tooltip
   margin-right: 20px
   line-height: 4
+
+.tooltip-content,
+  background: $tooltip-background-color
+  color: $tooltip-text-color
+.tooltip-content::after
+  border-top-color: $tooltip-background-color
 
 .fa-sparqlcity,
 .fa-frontendauth
