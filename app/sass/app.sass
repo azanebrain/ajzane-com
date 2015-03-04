@@ -20,6 +20,9 @@ $spacer: 20px //the general space between elements
   margin: 0 auto
   text-align: center
 
+// Libraries
+@import tooltip
+
 //normalize reset
 @for $i from 1 through 6
   h#{$i}
@@ -53,7 +56,7 @@ a:active
   color: $link-color
 a:hover
   color: $link-hover-color
-  
+
 // text utility
 .headline
   @extend %font-bold
@@ -92,8 +95,4 @@ a:hover
 // .slide
 
 .tooltip
-  display: none
-  visibility: hidden
-  a:hover &
-    display: block
-    visibility: visible
+  margin-right: 20px

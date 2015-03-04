@@ -1,0 +1,75 @@
+// Tooltip
+// Props to Codrops for this
+// https://github.com/codrops/TooltipStylesInspiration
+
+$tooltip-width: 130px //360px
+
+.tooltip
+  cursor: pointer
+  display: inline
+  position: relative
+  z-index: 999
+
+// Gap filler
+
+.tooltip:hover .tooltip-item::after
+  pointer-events: auto
+
+// Tooltip
+
+.tooltip-content
+  position: absolute
+  z-index: 9999
+  width: $tooltip-width
+  left: 50%
+  margin: 0 0 20px -1 * ($tooltip-width / 2)
+  bottom: 100%
+  text-align: left
+  line-height: 1.4
+  box-shadow: -5px -5px 15px rgba(48, 54, 61, 0.2)
+  background: #2a3035
+  opacity: 0
+  cursor: default
+  pointer-events: none
+
+.tooltip-effect .tooltip-content
+  -webkit-transform: translate3d(0, -10px, 0)
+  transform: translate3d(0, -10px, 0)
+  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s
+  transition: opacity 0.3s, transform 0.3s
+
+.tooltip
+  &:hover .tooltip-content
+    pointer-events: auto
+    opacity: 1
+    -webkit-transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0)
+    transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0)
+
+// Arrow
+
+.tooltip-content
+  &::after
+    content: ''
+    top: 100%
+    left: 50%
+    border: solid transparent
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+    border-color: transparent
+    border-top-color: #2a3035
+    border-width: 10px
+    margin-left: -10px
+  img
+    position: relative
+    height: 170px
+    display: block
+    float: left
+    margin-right: 1em
+
+// Tooltip content
+
+.tooltip-text
+  display: block
+  padding: .5em
