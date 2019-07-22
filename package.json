@@ -8,9 +8,7 @@
     "node": ">=v0.10.22"
   },
   "scripts": {
-    "build": "grunt publish",
-    "postinstall": "bower install",
-    "serve": "grunt",
+    "start": "node_modules/.bin/http-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -41,5 +39,8 @@
     "grunt-jade-usemin": "~0.11.1",
     "grunt-text-replace": "~0.4.0",
     "grunt-sass": "~0.18.0"
+  },
+  "dependencies": {
+    "http-server": "^0.11.1"
   }
 }
