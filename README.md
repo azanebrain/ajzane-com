@@ -2,9 +2,35 @@
 
 My personal website: [AJZane.com][http://AJZane.com]
 
-Run with `npm run serve`
+# Setup
 
-Build with `npm run build`
+Install all the necessary components with NPM
+
+```
+npm install
+```
+
+# Run
+
+Run it locally with NPM:
+
+```
+npm start
+```
+
+This will start a localhost on port 8080.
+
+# Deployment
+
+???
+
+I haven't gotten here yet
+
+
+---
+
+Old stuff:
+
 
 The `app` directory holds all of the core assets that make the site
 
